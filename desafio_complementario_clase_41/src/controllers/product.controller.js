@@ -66,7 +66,7 @@ export const createProduct = async (req, res) => {
 
     if (!title || !description || !code || !price || isNaN(stock) || !category) {
         console.log("Debes completar todos los campos");
-        return res.status(400).send({ error: "Debes completar correctamente todos los campos" });
+        return res.status(400).send({ status:"error", error: "Debes completar correctamente todos los campos" });
     }
     stock = Number(stock);
     if (stock <= 0) {
@@ -91,7 +91,7 @@ export const createProduct = async (req, res) => {
             category,
         });
 
-        res.send({ result: "success", payload: result });
+        res.status(201).send({ result: "success", payload: result });
 
     } catch (error) {
         console.error("Error al crear el producto", error);
@@ -133,7 +133,7 @@ export const deleteProduct = async (req, res) => {
     try {
         let { pid } = req.params;
         await productDAO.deleteProduct(pid);
-        res.send({ result: "success", payload: { deletedCount: 1 } });
+        res.status(200).send({ result: "success", payload: { deletedCount: 1 } });
     } catch (error) {
         console.error("El producto no se ha podido eliminar", error);
         res.status(500).send({ error: "El producto no se ha podido eliminar" });
