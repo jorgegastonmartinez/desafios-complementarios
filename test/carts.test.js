@@ -28,7 +28,7 @@ describe('Testing E-commerce - Carts', () => {
 
         it('Debe crear un carrito correctamente', async () => {
             const mockCart = {
-                user: '66c7bf7121f9e93f5e36c6ac',
+                user: '66c7c7d818922049e68ce615',
                 products: [
                     {
                         product: '66c7b7ad27cc34d97561d32e',
@@ -71,7 +71,7 @@ describe('Testing E-commerce - Carts', () => {
         });
 
         it('El método DELETE debe eliminar un carrito existente en MongoDB', async () => {
-            const CartId = ''; 
+            const CartId = '668c559d4d781575967ddb8a'; 
         
             const deleteResponse = await requester.delete(`/api/carts/${CartId}`);
         
