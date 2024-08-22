@@ -1,58 +1,53 @@
-import cartsModel from '../models/cart.model.js';
+import CartDAO from '../dao/cart/cart.dao.js'; 
 
-// Crear un nuevo carrito
+const cartDAO = new CartDAO();
+
 export const createCart = async (req, res) => {
     try {
-        const newCart = new cartsModel(req.body);
-        const savedCart = await newCart.save();
-        res.status(201).send({ result: "success", payload: savedCart });
+        const cartData = req.body;
+        const cart = await cartDAO.create(cartData);
+        res.status(201).json({ status: 'success', payload: cart });
     } catch (error) {
-        console.error("Error creando el carrito", error);
-        res.status(500).send({ error: "Error creando el carrito" });
+        res.status(400).json({ status: 'error', message: error.message });
     }
 };
 
-// Obtener un carrito por ID
+export const getAllCarts = async (req, res) => {
+    try {
+        const carts = await cartDAO.getAll();
+        res.status(200).json({ status: 'success', payload: carts });
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: error.message });
+    }
+};
+
 export const getCartById = async (req, res) => {
-    const { id } = req.params;
     try {
-        const cart = await cartsModel.findById(id).populate('products.product').populate('user');
-        if (!cart) {
-            return res.status(404).send({ error: "Carrito no encontrado" });
-        }
-        res.send({ result: "success", payload: cart });
+        const { cartId } = req.params;
+        const cart = await cartDAO.getById(cartId);
+        res.status(200).json({ status: 'success', payload: cart });
     } catch (error) {
-        console.error("Error obteniendo el carrito", error);
-        res.status(500).send({ error: "Error obteniendo el carrito" });
+        res.status(404).json({ status: 'error', message: error.message });
     }
 };
 
-// Actualizar un carrito por ID
 export const updateCart = async (req, res) => {
-    const { id } = req.params;
     try {
-        const updatedCart = await cartsModel.findByIdAndUpdate(id, req.body, { new: true }).populate('products.product').populate('user');
-        if (!updatedCart) {
-            return res.status(404).send({ error: "Carrito no encontrado" });
-        }
-        res.send({ result: "success", payload: updatedCart });
+        const { cartId } = req.params;
+        const cartData = req.body;
+        const updatedCart = await cartDAO.update(cartId, cartData);
+        res.status(200).json({ status: 'success', payload: updatedCart });
     } catch (error) {
-        console.error("Error actualizando el carrito", error);
-        res.status(500).send({ error: "Error actualizando el carrito" });
+        res.status(400).json({ status: 'error', message: error.message });
     }
 };
 
-// Eliminar un carrito por ID
 export const deleteCart = async (req, res) => {
-    const { id } = req.params;
     try {
-        const deletedCart = await cartsModel.findByIdAndDelete(id);
-        if (!deletedCart) {
-            return res.status(404).send({ error: "Carrito no encontrado" });
-        }
-        res.send({ result: "success", payload: deletedCart });
+        const { cartId } = req.params;
+        await cartDAO.delete(cartId);
+        res.status(200).json({ status: 'success', message: 'Carrito eliminado correctamente' });
     } catch (error) {
-        console.error("Error eliminando el carrito", error);
-        res.status(500).send({ error: "Error eliminando el carrito" });
+        res.status(404).json({ status: 'error', message: error.message });
     }
 };

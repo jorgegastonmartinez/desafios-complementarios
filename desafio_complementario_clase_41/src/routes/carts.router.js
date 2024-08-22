@@ -4,15 +4,15 @@ const router = Router();
 import {
     createCart,
     getCartById,
-    updateCart,
+    getAllCarts,
     deleteCart
 } from '../controllers/cart.controller.js'; 
 
 
 router.post('/carts', createCart);
-router.get('/carts/:id', getCartById);
-router.put('/carts/:id', updateCart);
-router.delete('/carts/:id', deleteCart);
+router.get('/carts', getAllCarts);
+router.get('/carts/:cartId', getCartById);
+router.delete('/carts/:cartId', deleteCart);
 
 export default router;
 

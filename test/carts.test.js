@@ -1,75 +1,83 @@
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 import { expect } from 'chai';
-import mongoose from "mongoose";
-import supertest from "supertest";
+import supertest from 'supertest';
+import Carts from '../desafio_complementario_clase_41/src/dao/cart/cart.dao.js';
+
+dotenv.config();
+const mongoUrl = process.env.MONGO_URL;
 
 const requester = supertest('http://localhost:8080');
 
-mongoose.connect(`mongodb+srv://Mongojoje:Mongojoje@cluster0.z5uj2rj.mongodb.net/swagger?retryWrites=true&w=majority&appName=Cluster0`);
+before(function () {
+    this.timeout(10000);
+    try {
+        mongoose.connect(mongoUrl);
+        console.log('Conectado a la base de datos para pruebas');
+    } catch (error) {
+        console.error('Error conectando a la base de datos', error);
+    }
+});
 
-describe('CRUD Operations for Carts', () => {
-    // Create Cart
-    it('Should create a new cart', async function () {
-        const response = await requester.post('/api/carts').send({
-            user: 'userId',
-            products: []
+describe('Testing E-commerce - Carts', () => {
+    describe('Test para carts', () => {
+
+        before(function () {
+            this.cartsDao = new Carts();
         });
 
-        expect(response.status).to.equal(201);
-        expect(response.body).to.have.property('_id');
-        expect(response.body).to.have.property('user');
-        expect(response.body).to.have.property('products').that.is.an('array');
-    });
+        it('Debe crear un carrito correctamente', async () => {
+            const mockCart = {
+                user: '66c7bf7121f9e93f5e36c6ac',
+                products: [
+                    {
+                        product: '66c7b7ad27cc34d97561d32e',
+                        quantity: 2
+                    }
+                ]
+            };
 
-    // Get Cart by ID
-    it('Should get a cart by ID', async function () {
-        const cart = await requester.post('/api/carts').send({
-            user: 'userId',
-            products: []
-        });
-        const cartId = cart.body._id;
+            const { statusCode, ok, _body } = await requester.post('/api/carts').send(mockCart);
+            console.log(statusCode);
+            console.log(ok);
+            console.log(_body);
 
-        const response = await requester.get(`/api/carts/${cartId}`);
-
-        expect(response.status).to.equal(200);
-        expect(response.body).to.have.property('_id').that.equals(cartId);
-    });
-
-    // Update Cart
-    it('Should update an existing cart', async function () {
-        const cart = await requester.post('/api/carts').send({
-            user: 'userId',
-            products: []
-        });
-        const cartId = cart.body._id;
-
-        const response = await requester.put(`/api/carts/${cartId}`).send({
-            products: [{ product: 'productId', quantity: 2 }]
+            expect(statusCode).to.equal(201);
+            expect(ok).to.be.true;
         });
 
-        expect(response.status).to.equal(200);
-        expect(response.body).to.have.property('products').that.is.an('array').with.lengthOf(1);
-        expect(response.body.products[0]).to.have.property('quantity').that.equals(2);
-    });
+        it('Debe devolver un status 400 al intentar crear un carrito sin el campo user', async () => {
+            const cartWithoutUser = {
+                products: [
+                    {
+                        product: '66c7b7ad27cc34d97561d32e',
+                        quantity: 2
+                    }
+                ]
+            };
 
-    // Delete Cart
-    it('Should delete a cart by ID', async function () {
-        const cart = await requester.post('/api/carts').send({
-            user: 'userId',
-            products: []
+            const { statusCode, _body } = await requester.post('/api/carts').send(cartWithoutUser);
+
+            expect(statusCode).to.equal(400);
+            expect(_body).to.have.property('status').that.equals('error');
         });
-        const cartId = cart.body._id;
 
-        const response = await requester.delete(`/api/carts/${cartId}`);
+        it('El endpoint GET /api/carts debe devolver un status "success" y un payload que sea un arreglo', async () => {
+            const { statusCode, _body } = await requester.get('/api/carts');
+            
+            expect(statusCode).to.equal(200);
+            expect(_body).to.have.property('status').that.equals('success');
+            expect(_body).to.have.property('payload').to.be.an('array');
+        });
 
-        expect(response.status).to.equal(200);
-        expect(response.body).to.have.property('message').that.equals('Cart deleted successfully');
-    });
-
-    // Additional Test: Handling invalid cart ID
-    it('Should return an error for invalid cart ID', async function () {
-        const response = await requester.get('/api/carts/invalidCartId');
-
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error').that.equals('Invalid cart ID');
+        it('El método DELETE debe eliminar un carrito existente en MongoDB', async () => {
+            const CartId = ''; 
+        
+            const deleteResponse = await requester.delete(`/api/carts/${CartId}`);
+        
+            expect(deleteResponse.statusCode).to.equal(200);
+            expect(deleteResponse._body).to.have.property('status').that.equals('success');
+            expect(deleteResponse._body).to.have.property('message').that.equals('Carrito eliminado correctamente');
+        });
     });
 });
