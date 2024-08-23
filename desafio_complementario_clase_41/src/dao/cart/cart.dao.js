@@ -1,7 +1,6 @@
 import Carts from "../../models/cart.model.js";
 import mongoose from "mongoose";
 
-
 export default class CartDAO {
     async create(cartData) {
         try {

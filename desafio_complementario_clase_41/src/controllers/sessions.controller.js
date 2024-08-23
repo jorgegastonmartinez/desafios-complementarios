@@ -21,13 +21,14 @@ export const registerUser = (req, res, next) => {
         return next(err);
         }
         return res.redirect("/login");
+
         });
     })(req, res, next);
 };
 
 export const failRegister = (req, res) => {
     console.log("Estrategia fallida");
-    res.send({ error: "Falló" });
+    res.status(400).send({ error: "Falló" });
 };
 
 export const loginUser = (req, res, next) => {
@@ -36,7 +37,7 @@ export const loginUser = (req, res, next) => {
         return next(err);
     }
     if (!user) {
-        return res.status(400).send({ status: "Error", error: "Error al iniciar sesión" });
+        return res.status(400).json({ status: "Error", error: "Error al iniciar sesión" });
     }
     req.logIn(user, (err) => {
         if (err) {
@@ -67,7 +68,7 @@ export const loginUser = (req, res, next) => {
 };
 
 export const failLogin = (req, res) => {
-    res.send({ error: "Login fallido" });
+    res.status(400).json({ status: "Error", error: "Error al iniciar sesión" });
 };
 
 export const logoutUser = (req, res) => {

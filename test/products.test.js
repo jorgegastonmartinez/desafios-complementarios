@@ -6,7 +6,6 @@ import Products from '../desafio_complementario_clase_41/src/dao/product/product
 
 dotenv.config();
 const mongoUrl = process.env.MONGO_URL;
-
 const requester = supertest('http://localhost:8080')
 
 before (function () {
@@ -21,7 +20,6 @@ before (function () {
 
 describe('Testing E-commerce', () => {
     describe('Test para products', () => {
-
         before(function () {
             this.productsDao = new Products()
         })
@@ -85,7 +83,6 @@ describe('Testing E-commerce', () => {
         })
 
         it('El método DELETE debe eliminar el ultimo producto agregado', async () => {
-        
             const newProdDelete = {
                 title: "title product delete2",
                 description: "description del producto test to delete2",
@@ -102,4 +99,4 @@ describe('Testing E-commerce', () => {
             expect(deleteResponse.statusCode).to.equal(200)
         })
     })
-})
+});

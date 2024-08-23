@@ -8,7 +8,6 @@ import {
     deleteCart
 } from '../controllers/cart.controller.js'; 
 
-
 router.post('/carts', createCart);
 router.get('/carts', getAllCarts);
 router.get('/carts/:cartId', getCartById);

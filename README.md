@@ -32,9 +32,18 @@ test de sessions => modificar el scripts "mocha test/sessions.test.js"
 
 ## Imagenes del proyecto
 
-Vista Documentación en la UI.
+Vista test Products.
 
-![](./desafio_entregable_clase_39/src/public/img/Captura%20de%20pantalla%202024-08-16%20a%20la(s)%204.50.28 p. m..png)
+![](./desafio_complementario_clase_41/src/public/img/Captura%20de%20pantalla%202024-08-22%20a%20la(s)%207.14.11 p. m..png)
+
+Vista Test Carts.
+
+![](./desafio_complementario_clase_41/src/public/img/Captura%20de%20pantalla%202024-08-22%20a%20la(s)%208.19.26 p. m..png)
+
+
+Vista Test Sessions.
+
+![](./desafio_complementario_clase_41/src/public/img/Captura%20de%20pantalla%202024-08-23%20a%20la(s)%205.31.33 p. m..png)
 
 
 ## Contacto

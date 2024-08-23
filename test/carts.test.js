@@ -6,7 +6,6 @@ import Carts from '../desafio_complementario_clase_41/src/dao/cart/cart.dao.js';
 
 dotenv.config();
 const mongoUrl = process.env.MONGO_URL;
-
 const requester = supertest('http://localhost:8080');
 
 before(function () {
@@ -15,13 +14,12 @@ before(function () {
         mongoose.connect(mongoUrl);
         console.log('Conectado a la base de datos para pruebas');
     } catch (error) {
-        console.error('Error conectando a la base de datos', error);
+        console.error('Error al conectar con la base de datos', error);
     }
 });
 
 describe('Testing E-commerce - Carts', () => {
     describe('Test para carts', () => {
-
         before(function () {
             this.cartsDao = new Carts();
         });

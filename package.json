@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --watch desafio_complementario_clase_41/src/app.js",
     "dev": "nodemon desafio_complementario_clase_41/src/app.js",
-    "test": "mocha test/carts.test.js"
+    "test": "mocha test/sessions.test.js"
   },
   "keywords": [],
   "author": "",
